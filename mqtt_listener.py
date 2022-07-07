@@ -3,8 +3,6 @@ import random
 
 from paho.mqtt import client as mqtt_client
 
-
-# from module import json_to_csv as csv
 import data_access as db
 
 #  134.209.158.162 -t 'test/topic'
