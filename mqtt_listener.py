@@ -10,7 +10,7 @@ import data_access as db
 #  134.209.158.162 -t 'test/topic'
 
 # broker = 'phaidelta.com'
-broker = '134.209.158.162'
+broker = 'phaidelta.com'
 port = 1883
 topic = "Genesis"
 # 'IOT/Genesis/'
@@ -40,7 +40,6 @@ def subscribe(client: mqtt_client):
         data = json.loads(msg.payload.decode())
         for row in data["sensor_value"]:
             db.insert_data_into_history_table(row)
-
         # db.append_data_in_csv(data)
     client.subscribe(topic)
     client.on_message = on_message
