@@ -19,5 +19,9 @@ def get_sensor_data():
 def get_history_data():
     return db.get_history_data()[1]
 
+@app.get('/time_series')
+def get_history_data():
+    return db.get_time_series_data()
+
 if __name__ == '__main__':
     uvicorn.run(app, host="localhost", port=5000)
