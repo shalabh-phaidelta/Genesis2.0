@@ -42,7 +42,7 @@ def get_data_from_sensor_master(sensor_id = None):
     return data
 
 def get_history_data():
-    return read_data_from_table(f"select * from history_table order by history_id DESC")
+    return read_data_from_table(f"select * from history_table order by history_id DESC LIMIT 100")
 
 def insert_data_into_history_table(data):
     sql =  f''' INSERT INTO history_table (sensor_name, sensor_value,status_tag,create_ts) VALUES ('{data['ID']}','{data['VALUE']}','{data['status']}','{data['timestamp']}')'''
