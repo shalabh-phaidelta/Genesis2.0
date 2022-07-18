@@ -1,3 +1,4 @@
+from datetime import datetime
 from fastapi import FastAPI 
 import uvicorn
 
@@ -17,7 +18,13 @@ def get_sensor_data():
 
 @app.get('/history_data')
 def get_history_data():
-    return db.get_history_data()[1]
+    return db.get_last_100_entry()[1]
+
+@app.get('/history_data/{start_time}/{end_time}')
+def get_data_between_time(start_time : int , end_time : int ):
+    # datetime.now().timestamp()
+    return db.get_data_between_time(start_time, end_time)[1]
+
 
 if __name__ == '__main__':
     uvicorn.run(app, host="localhost", port=5000)
