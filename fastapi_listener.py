@@ -1,4 +1,5 @@
 from datetime import datetime
+from distutils.log import debug
 from fastapi import FastAPI 
 import uvicorn
 
@@ -9,8 +10,13 @@ app=FastAPI()
 
 @app.post('/post_data')
 def json_listener(data_ :dict):
+    
     for row in data_["sensor_value"]:
-        db.insert_data_into_history_table(row)
+        result = db.insert_data_into_history_table(row)
+        if result != 'Success':
+            print(row)
+            break
+    return result
 
 @app.get('/sensor_master')
 def get_sensor_data():

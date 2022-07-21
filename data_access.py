@@ -62,8 +62,13 @@ def get_data_between_time(start_time=datetime.now().timestamp()-10000, end_time=
     return colum, result
 
 def insert_data_into_history_table(data):
-    sql =  f''' INSERT INTO history_table (sensor_name, sensor_value,status_tag,sensor_ts,create_ts) VALUES ('{data['ID']}','{data['VALUE']}','{data['status']}','{data['timestamp']}',{datetime.now().timestamp()})'''
-    insert_data_into_table(sql)
+    try :
+        sql =  f''' INSERT INTO history_table (sensor_name, sensor_value,status_tag,sensor_ts,create_ts) VALUES ('{data['ID']}','{data['VALUE']}','{data['status']}','{data['timestamp']}',{datetime.now().timestamp()})'''
+        insert_data_into_table(sql)
 
+        # raise ValueError
+        return 'Success'
+    except Exception as e :
+        return f"Unhandled Error {e}"
 
 
