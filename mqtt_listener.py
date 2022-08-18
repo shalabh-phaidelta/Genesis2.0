@@ -36,8 +36,8 @@ def connect_mqtt() -> mqtt_client:
 def subscribe(client: mqtt_client):
     def on_message(client, userdata, msg):
         data = json.loads(msg.payload.decode())
-        for row in data["sensor_value"]:
-            db.insert_data_into_history_table(row)
+        # for row in data["sensor_value"]:
+        db.recive_data_from_aliter(data)
         # db.append_data_in_csv(data)
     client.subscribe(topic)
     client.on_message = on_message
