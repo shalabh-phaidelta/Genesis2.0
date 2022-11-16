@@ -15,7 +15,7 @@ class TokenPayload(BaseModel):
     exp: int = None
 
 class UserLogin(BaseModel):
-    email : str = Field(..., description="user email")
+    username : str = Field(..., description="user email")
     password: str = Field(..., min_length=5, max_length=24, description="user password")
 
 class UserAuth(BaseModel):

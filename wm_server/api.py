@@ -6,7 +6,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import FastAPI, status, HTTPException, Depends, WebSocket , Query
 from uuid import uuid4
 import json
-
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.testclient import TestClient
 
 from .shared.schemas import UserAuth, UserOut, TokenSchema, SystemUser, Report_Interval, UserLogin
@@ -17,6 +17,19 @@ from .shared.deps import get_current_user , get_user_info_from_token
 from .business_logic import user_resources
 
 app = FastAPI()
+
+origins = [
+    "https://genesis2-api.phaidelta.com/",
+    "https://genesis-f2.surge.sh",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 async def websocket_connect(websocket, msg):
     await websocket.accept()
@@ -53,28 +66,33 @@ async def metric_chart_history(metric_id : int, parameter : Report_Interval,  us
 @app.post('/login',summary = 'Create access and refresh tokens for user', response_model = TokenSchema)
 async def login(from_data : UserLogin):
     try:
-        user = db.User().get_user_info_by_email(from_data.email)
+        user = db.User().get_user_info_by_email(from_data.username)
+        print(user)
     except TypeError:
         user = None
     if user is None:
+        print("Email error")
         raise HTTPException(
             status_code = status.HTTP_400_BAD_REQUEST,
             detail = "Incorrect email or user_name"
         )
     hashed_password = user['password']
     if not verify_password(from_data.password, hashed_password):
+        print("Password missmatch", from_data.password)
         raise HTTPException(
             status_code = status.HTTP_400_BAD_REQUEST,
             detail = "Incorrect Email or password"
         )
-    access_token = create_access_token(user['email'])
+    access_token = create_access_token(from_data.username)
+    print("Access token")
     db.update_token_for_user(user['user_id'], access_token)
+    
     return {
         "id_user" : user['user_id'],
         'role' : 'CXO',
         "token": access_token,
         'username' : user['email'],
-        "refresh_token": create_refresh_token(user['email']),
+        "refresh_token": create_refresh_token(from_data.username),
     }
 
 
