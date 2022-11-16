@@ -1,0 +1,4 @@
+- add logger 
+- Role for user
+- Admin module to add sensor and units
+- mqtt listener
