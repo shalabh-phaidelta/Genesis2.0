@@ -191,10 +191,8 @@ def get_latest_metric_data(metric_id :int, user_id = int):
     response = []
     try:
         with db.create_sesion() as session:
-            metric_info = session.query(vw.VW_Metric_Summary_Latest_unit_Level).filter(vw.VW_Metric_Summary_Latest_unit_Level.sensor_id == metric_id and vw.VW_Metric_Summary_Latest_unit_Level.user_id == user_id).all()
+            metric_info = session.query(vw.VW_Metric_Summary_Latest_unit_Level).filter(vw.VW_Metric_Summary_Latest_unit_Level.sensor_id == metric_id , vw.VW_Metric_Summary_Latest_unit_Level.user_id == user_id).all()
             for i in metric_info:
-                print(i)
-                print(i.location_id)
                 response.append({
                     'metric_id': i.sensor_id,
                     'metric_name' : i.sensor_alias,
@@ -203,8 +201,9 @@ def get_latest_metric_data(metric_id :int, user_id = int):
                     'unit_id' : i.unit_id,
                     'unit_name' : i.unit_name,
                     'is_warehouse_level_unit' : i.is_warehouse_level_unit,
-                    'label' : i.sensor_name})
-
+                    'label' : i.sensor_name,
+                    'measure_unit': i.unit,
+                    'sensor_type': i.sensor_type})
     except StopIteration:
         raise ValueError("Failed to Fetch Data for metric")    
     return response
