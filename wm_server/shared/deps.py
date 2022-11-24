@@ -98,7 +98,6 @@ class JWTBearer(HTTPBearer):
         if credentials:
             if not credentials.scheme == "Bearer":
                 raise HTTPException(status_code=403, detail="Invalid authentication scheme.")
-            print("printing token as str :", credentials.credentials)
             return credentials.credentials
         else:
             raise HTTPException(status_code=403, detail="Invalid authorization code.")
@@ -106,8 +105,6 @@ class JWTBearer(HTTPBearer):
 
 async def get_current_user(token : str = Depends(JWTBearer())):
     try:
-        print("token : ", token)
-        print("str:",str(token))
         payload = jwt.decode(
             token , JWT_SECRET_KEY, algorithms=[ALGORITHM]
         )

@@ -56,8 +56,8 @@ def warehouse_view_warehouse_level_metrics(user_id :int , location_id :int):
     with db.create_sesion() as session:
         try:
             return session.query(vw.VW_Metric_Summary_Latest_unit_Level).filter(
-                vw.VW_Metric_Summary_Latest_unit_Level.user_id == user_id and 
-                vw.VW_Metric_Summary_Latest_unit_Level.location_id==location_id and 
+                vw.VW_Metric_Summary_Latest_unit_Level.user_id == user_id , 
+                vw.VW_Metric_Summary_Latest_unit_Level.location_id==location_id , 
                 vw.VW_Metric_Summary_Latest_unit_Level.is_warehouse_level_unit == True)
         except StopIteration:
             raise ValueError("Failed to fetch data. Procedure did not return any result")
@@ -110,8 +110,8 @@ def unit_view_unit_metrics(user_id : int, location_id : int , unit_id : int):
     response = []
     with db.create_sesion() as session:
         result = session.query(vw.VW_Metric_Summary_Latest_unit_Level).filter(
-            vw.VW_Metric_Summary_Latest_unit_Level.user_id == user_id and
-            vw.VW_Metric_Summary_Latest_unit_Level.location_id == location_id and
+            vw.VW_Metric_Summary_Latest_unit_Level.user_id == user_id ,
+            vw.VW_Metric_Summary_Latest_unit_Level.location_id == location_id ,
             vw.VW_Metric_Summary_Latest_unit_Level.unit_id == unit_id
             ).all()
         for i in result:
@@ -172,7 +172,7 @@ def data_for_metrics(user_id : int, location_id : int):
     with db.create_sesion() as session:
         try:
             with db.create_sesion() as session:
-                tmp = session.query(vw.VM_Unit_location_mapping_info).filter(vw.VM_Unit_location_mapping_info.user_id == user_id and vw.VM_Unit_location_mapping_info.location_id==location_id).all()
+                tmp = session.query(vw.VM_Unit_location_mapping_info).filter(vw.VM_Unit_location_mapping_info.user_id == user_id , vw.VM_Unit_location_mapping_info.location_id==location_id).all()
             # ending = ';' if location_id == 0 else f'and location_id = {location_id};'
             # tmp = session.execute(f'select * from vw_get_all_metrics_out_for_user where user_id = {user_id} {ending}').all()
             # if tmp is not None:
