@@ -80,6 +80,15 @@ async def websocket_endpoint( warehouse_id : int ,websocket: WebSocket ):
         )
 
 
+@app.get('/metrics/warehouse/{warehouse_id}')
+async def unit_details(warehouse_id : int,  user : SystemUser = Depends(get_current_user)):
+    return user_resources.Metrics_Warehouse().get(warehouse_id, user.user_id)
+
+@app.get('/metrics/warehouse/{warehouse_id}/unit/{unit_id}')
+async def unit_details(warehouse_id : int, unit_id : int, user : SystemUser = Depends(get_current_user)):
+    return user_resources.Metrics_Unit().get(warehouse_id, unit_id, user.user_id)
+
+
 @app.get('/locations/{location_id}/summary', summary = 'Get details of current user location')
 async def less_qty(location_id : int, user : SystemUser = Depends(get_current_user)):
     return user_resources.Location_Summary().get(location_id, user.user_id)
