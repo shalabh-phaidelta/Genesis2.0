@@ -46,10 +46,10 @@ class Metrics_Warehouse():
     def get(self, location_id :int, user_id : int):
         # user_id = 3
 
-        return json.dumps( {
+        return {
             'wv_warehouse_metrics': self.warehouse_view_warehouse_level_metrics(user_id, location_id),
             'wv_unit_summary': self.warehouse_view_unit_level_summary(user_id, location_id),
-        }, cls =DecimalEncoder)
+        }
         
     @staticmethod
     def warehouse_view_warehouse_level_metrics( user_id : int, location_id : int):
@@ -174,10 +174,9 @@ class MetricHistoryJSON():
 
 class Metrics_Unit():
     def get(self, location_id, unit_id, user_id):
-        return json.dumps( {
+              return {
             'uv_unit_metrics': self.unit_view_unit_metrics(user_id, location_id, unit_id),
-        }, cls=DecimalEncoder )
-
+        }
     @staticmethod
     def unit_view_unit_metrics(user_id : int, location_id : int, unit_id : int):
         return db_queries.unit_view_unit_metrics(user_id, location_id, unit_id)
